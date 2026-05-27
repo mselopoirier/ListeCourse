@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f4ebd8" />
+  <title>Panier Doux</title>
+  <meta name="description" content="Une liste de courses simple et chaleureuse." />
+  <link rel="icon" type="image/png" href="./icon.png" />
+  <link rel="apple-touch-icon" href="./icon.png" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <style>
+    :root {
+      --cream: #f4ebd8;
+      --paper: #fff9ec;
+      --ink: #2f2a22;
+      --muted: #807667;
+      --sage: #6d7b5f;
+      --sage-dark: #536049;
+      --terracotta: #c97455;
+      --line: rgba(83, 76, 62, .14);
+      --shadow: 0 22px 60px rgba(81, 64, 39, .16);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, rgba(201, 116, 85, .18), transparent 34rem),
+        linear-gradient(180deg, #f8f0df 0%, var(--cream) 100%);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .app {
+      width: min(100%, 560px);
+      margin: 0 auto;
+      padding: 22px 16px 36px;
+    }
+
+    header {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      margin: 8px 0 18px;
+    }
+
+    .icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 18px;
+      box-shadow: 0 12px 30px rgba(95, 71, 43, .18);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1;
+      letter-spacing: -.04em;
+    }
+
+    .subtitle {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .panel {
+      background: rgba(255, 249, 236, .88);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 14px;
+      backdrop-filter: blur(14px);
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    input, select, button {
+      width: 100%;
+      min-height: 48px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      font: inherit;
+      font-size: 16px;
+    }
+
+    input, select {
+      background: #fffdf6;
+      color: var(--ink);
+      padding: 0 14px;
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: rgba(109, 123, 95, .55);
+      box-shadow: 0 0 0 4px rgba(109, 123, 95, .16);
+    }
+
+    .add {
+      border: 0;
+      background: var(--sage);
+      color: white;
+      font-weight: 800;
+    }
+
+    .add:active { transform: translateY(1px); }
+
+    .summary {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin: 16px 0 10px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .filter {
+      min-height: 40px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .filter.active {
+      background: rgba(109, 123, 95, .14);
+      border-color: rgba(109, 123, 95, .34);
+      color: var(--sage-dark);
+    }
+
+    .clear {
+      width: auto;
+      min-height: 34px;
+      padding: 0 10px;
+      border: 0;
+      background: transparent;
+      color: var(--terracotta);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .item {
+      display: grid;
+      grid-template-columns: 34px 1fr 38px;
+      gap: 10px;
+      align-items: center;
+      min-height: 58px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fffdf7;
+    }
+
+    .item.done .name {
+      color: var(--muted);
+      text-decoration: line-through;
+    }
+
+    .check {
+      width: 26px;
+      height: 26px;
+      min-height: 26px;
+      border-radius: 9px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(109, 123, 95, .42);
+      background: #fff;
+      color: white;
+    }
+
+    .item.done .check {
+      background: var(--sage);
+      border-color: var(--sage);
+    }
+
+    .name {
+      font-weight: 800;
+      word-break: break-word;
+    }
+
+    .cat {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .delete {
+      width: 38px;
+      min-height: 38px;
+      border: 0;
+      background: rgba(201, 116, 85, .1);
+      color: var(--terracotta);
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .empty {
+      padding: 30px 18px;
+      text-align: center;
+      color: var(--muted);
+      border: 1px dashed rgba(83, 76, 62, .22);
+      border-radius: 20px;
+      background: rgba(255, 253, 246, .62);
+    }
+
+    @media (min-width: 520px) {
+      form { grid-template-columns: 1fr 170px 96px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header>
+      <img class="icon" src="./icon.png" alt="" />
+      <div>
+        <h1>Panier Doux</h1>
+        <p class="subtitle">Ta liste de courses, gardée sur ce téléphone.</p>
+      </div>
+    </header>
+
+    <section class="panel" aria-label="Liste de courses">
+      <form id="form">
+        <input id="name" autocomplete="off" placeholder="Ajouter un article…" />
+        <select id="category" aria-label="Catégorie">
+          <option>Fruits & légumes</option>
+          <option>Boucherie</option>
+          <option>Épicerie</option>
+          <option>Bébé</option>
+          <option>Maison</option>
+          <option>Autre</option>
+        </select>
+        <button class="add" type="submit">Ajouter</button>
+      </form>
+
+      <div class="summary">
+        <strong id="counter">Liste vide</strong>
+        <button class="clear" id="clear" type="button">Vider achetés</button>
+      </div>
+
+      <div class="filters" role="tablist" aria-label="Filtres">
+        <button class="filter active" data-filter="all" type="button">Tous</button>
+        <button class="filter" data-filter="todo" type="button">À acheter</button>
+        <button class="filter" data-filter="done" type="button">Achetés</button>
+      </div>
+
+      <div class="list" id="list"></div>
+    </section>
+  </main>
+
+  <script>
+    const STORAGE_KEY = "panier-doux-items-v1";
+    const form = document.querySelector("#form");
+    const nameInput = document.querySelector("#name");
+    const categoryInput = document.querySelector("#category");
+    const list = document.querySelector("#list");
+    const counter = document.querySelector("#counter");
+    const clearButton = document.querySelector("#clear");
+    const filterButtons = [...document.querySelectorAll(".filter")];
+
+    let items = loadItems();
+    let filter = "all";
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const name = nameInput.value.trim();
+      if (!name) return;
+
+      items.unshift({
+        id: Date.now(),
+        name,
+        category: categoryInput.value,
+        done: false
+      });
+      nameInput.value = "";
+      saveAndRender();
+      nameInput.focus();
+    });
+
+    clearButton.addEventListener("click", () => {
+      items = items.filter(item => !item.done);
+      saveAndRender();
+    });
+
+    filterButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        filter = button.dataset.filter;
+        filterButtons.forEach(item => item.classList.toggle("active", item === button));
+        render();
+      });
+    });
+
+    function render() {
+      const remaining = items.filter(item => !item.done).length;
+      counter.textContent = items.length === 0
+        ? "Liste vide"
+        : remaining === 0
+          ? "Tout est dans le panier !"
+          : `${remaining} article${remaining > 1 ? "s" : ""} à acheter`;
+
+      clearButton.disabled = !items.some(item => item.done);
+
+      const visible = items.filter(item => {
+        if (filter === "todo") return !item.done;
+        if (filter === "done") return item.done;
+        return true;
+      });
+
+      if (visible.length === 0) {
+        list.innerHTML = `<div class="empty">${items.length === 0 ? "Ajoute ton premier article." : "Rien dans ce filtre."}</div>`;
+        return;
+      }
+
+      list.innerHTML = "";
+      visible.forEach(item => {
+        const row = document.createElement("article");
+        row.className = `item ${item.done ? "done" : ""}`;
+        row.innerHTML = `
+          <button class="check" type="button" aria-label="${item.done ? "Marquer non acheté" : "Marquer acheté"}">${item.done ? "✓" : ""}</button>
+          <div>
+            <div class="name"></div>
+            <div class="cat"></div>
+          </div>
+          <button class="delete" type="button" aria-label="Supprimer">×</button>
+        `;
+        row.querySelector(".name").textContent = item.name;
+        row.querySelector(".cat").textContent = item.category;
+        row.querySelector(".check").addEventListener("click", () => {
+          item.done = !item.done;
+          saveAndRender();
+        });
+        row.querySelector(".delete").addEventListener("click", () => {
+          items = items.filter(candidate => candidate.id !== item.id);
+          saveAndRender();
+        });
+        list.appendChild(row);
+      });
+    }
+
+    function saveAndRender() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+      render();
+    }
+
+    function loadItems() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+        return Array.isArray(parsed) ? parsed : [];
+      } catch {
+        return [];
+      }
+    }
+
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js").catch(() => {});
+      });
+    }
+
+    render();
+  </script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "name": "Panier Doux",
+  "short_name": "Panier Doux",
+  "description": "Une liste de courses simple et chaleureuse.",
+  "lang": "fr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4ebd8",
+  "theme_color": "#f4ebd8",
+  "icons": [
+    {
+      "src": "./icon.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
