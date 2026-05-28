@@ -1,4 +1,4 @@
-const CACHE = "panier-doux-v1";
+const CACHE = "panier-doux-v2";
 const FILES = ["./", "./index.html", "./icon.png", "./manifest.webmanifest"];
 
 self.addEventListener("install", event => {
