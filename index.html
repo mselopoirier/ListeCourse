@@ -18,6 +18,7 @@
       --sage: #6d7b5f;
       --sage-dark: #536049;
       --terracotta: #c97455;
+      --red: #b9493d;
       --line: rgba(83, 76, 62, .14);
       --shadow: 0 22px 60px rgba(81, 64, 39, .16);
     }
@@ -34,10 +35,24 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
+    button, input, select, textarea {
+      font: inherit;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: .45;
+    }
+
     .app {
-      width: min(100%, 560px);
+      width: min(100%, 620px);
       margin: 0 auto;
-      padding: 22px 16px 36px;
+      padding: 18px 14px 38px;
     }
 
     header {
@@ -52,6 +67,7 @@
       height: 64px;
       border-radius: 18px;
       box-shadow: 0 12px 30px rgba(95, 71, 43, .18);
+      flex: 0 0 auto;
     }
 
     h1 {
@@ -65,10 +81,11 @@
       margin: 6px 0 0;
       color: var(--muted);
       font-size: 14px;
+      line-height: 1.35;
     }
 
-    .panel {
-      background: rgba(255, 249, 236, .88);
+    .panel, .soft-panel {
+      background: rgba(255, 249, 236, .9);
       border: 1px solid var(--line);
       border-radius: 28px;
       box-shadow: var(--shadow);
@@ -76,9 +93,15 @@
       backdrop-filter: blur(14px);
     }
 
+    .soft-panel {
+      margin-top: 14px;
+      box-shadow: none;
+      border-radius: 22px;
+      background: rgba(255, 253, 246, .66);
+    }
+
     form {
       display: grid;
-      grid-template-columns: 1fr;
       gap: 10px;
     }
 
@@ -87,7 +110,6 @@
       min-height: 48px;
       border-radius: 16px;
       border: 1px solid var(--line);
-      font: inherit;
       font-size: 16px;
     }
 
@@ -99,7 +121,7 @@
     }
 
     textarea {
-      min-height: 88px;
+      min-height: 92px;
       resize: vertical;
       line-height: 1.35;
     }
@@ -109,6 +131,12 @@
       box-shadow: 0 0 0 4px rgba(109, 123, 95, .16);
     }
 
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
     .add {
       border: 0;
       background: var(--sage);
@@ -116,11 +144,18 @@
       font-weight: 800;
     }
 
-    .add:active { transform: translateY(1px); }
+    .ghost {
+      background: transparent;
+      color: var(--sage-dark);
+      font-weight: 800;
+    }
+
+    .add:active, .ghost:active, .chip:active, .delete:active, .check:active {
+      transform: translateY(1px);
+    }
 
     .hint {
-      grid-column: 1 / -1;
-      margin: 2px 2px 4px;
+      margin: 0 2px;
       color: var(--muted);
       font-size: 12px;
       line-height: 1.35;
@@ -134,6 +169,35 @@
       margin: 16px 0 10px;
       color: var(--muted);
       font-size: 14px;
+    }
+
+    .summary strong {
+      color: var(--sage-dark);
+    }
+
+    .clear {
+      width: auto;
+      min-height: 34px;
+      padding: 0 10px;
+      border: 0;
+      background: transparent;
+      color: var(--terracotta);
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .finish {
+      display: none;
+      margin: 0 0 12px;
+      border: 0;
+      background: var(--terracotta);
+      color: white;
+      font-weight: 850;
+    }
+
+    .finish.visible {
+      display: block;
     }
 
     .filters {
@@ -157,17 +221,6 @@
       color: var(--sage-dark);
     }
 
-    .clear {
-      width: auto;
-      min-height: 34px;
-      padding: 0 10px;
-      border: 0;
-      background: transparent;
-      color: var(--terracotta);
-      font-size: 13px;
-      font-weight: 800;
-    }
-
     .list {
       display: grid;
       gap: 8px;
@@ -175,8 +228,8 @@
 
     .item {
       display: grid;
-      grid-template-columns: 34px 1fr 38px;
-      gap: 10px;
+      grid-template-columns: 34px 1fr auto 38px;
+      gap: 9px;
       align-items: center;
       min-height: 58px;
       padding: 10px;
@@ -191,15 +244,16 @@
     }
 
     .check {
-      width: 26px;
-      height: 26px;
-      min-height: 26px;
+      width: 28px;
+      height: 28px;
+      min-height: 28px;
       border-radius: 9px;
       display: grid;
       place-items: center;
       border: 1px solid rgba(109, 123, 95, .42);
       background: #fff;
       color: white;
+      font-weight: 900;
     }
 
     .item.done .check {
@@ -208,7 +262,7 @@
     }
 
     .name {
-      font-weight: 800;
+      font-weight: 850;
       word-break: break-word;
     }
 
@@ -218,14 +272,116 @@
       font-size: 12px;
     }
 
+    .qty {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px;
+      border-radius: 999px;
+      background: rgba(109, 123, 95, .1);
+    }
+
+    .qty button {
+      width: 28px;
+      min-height: 28px;
+      border: 0;
+      border-radius: 50%;
+      background: white;
+      color: var(--sage-dark);
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .qty span {
+      min-width: 24px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 850;
+      color: var(--sage-dark);
+    }
+
     .delete {
       width: 38px;
       min-height: 38px;
       border: 0;
       background: rgba(201, 116, 85, .1);
       color: var(--terracotta);
-      font-size: 20px;
+      font-size: 22px;
       line-height: 1;
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      font-size: 16px;
+      letter-spacing: -.02em;
+    }
+
+    .section-title p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: right;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      width: auto;
+      min-height: 38px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: #fffdf7;
+      color: var(--sage-dark);
+      font-size: 13px;
+      font-weight: 800;
+      border-color: rgba(109, 123, 95, .22);
+    }
+
+    .chip.favorite {
+      color: var(--terracotta);
+      border-color: rgba(201, 116, 85, .28);
+      background: rgba(201, 116, 85, .08);
+    }
+
+    .mode {
+      margin: 10px 0 12px;
+      display: none;
+      border-radius: 22px;
+      padding: 12px;
+      background: rgba(109, 123, 95, .12);
+      border: 1px solid rgba(109, 123, 95, .22);
+    }
+
+    .mode.active {
+      display: block;
+    }
+
+    .mode .item {
+      grid-template-columns: 42px 1fr;
+      min-height: 72px;
+      font-size: 18px;
+    }
+
+    .mode .check {
+      width: 36px;
+      height: 36px;
+      min-height: 36px;
+    }
+
+    .mode .qty, .mode .delete {
+      display: none;
     }
 
     .empty {
@@ -235,13 +391,43 @@
       border: 1px dashed rgba(83, 76, 62, .22);
       border-radius: 20px;
       background: rgba(255, 253, 246, .62);
+      line-height: 1.45;
     }
 
-    @media (min-width: 520px) {
-      form { grid-template-columns: 1fr 170px 96px; }
-      textarea { grid-column: 1 / -1; }
-      select { grid-column: 1 / 3; }
-      .add { grid-column: 3 / 4; }
+    .toast {
+      position: fixed;
+      left: 14px;
+      right: 14px;
+      bottom: 14px;
+      z-index: 10;
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 12px 14px;
+      border-radius: 18px;
+      background: var(--ink);
+      color: white;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, .24);
+      opacity: 0;
+      transform: translateY(12px);
+      transition: .2s ease;
+      pointer-events: none;
+      font-size: 14px;
+      font-weight: 750;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (min-width: 540px) {
+      .form-row {
+        grid-template-columns: 1fr 124px;
+      }
+
+      .item {
+        grid-template-columns: 34px 1fr auto 38px;
+      }
     }
   </style>
 </head>
@@ -251,23 +437,26 @@
       <img class="icon" src="./icon.png" alt="" />
       <div>
         <h1>Panier Doux</h1>
-        <p class="subtitle">Ta liste de courses, gardée sur ce téléphone.</p>
+        <p class="subtitle">Ta liste de courses intelligente, gardée sur ce téléphone.</p>
       </div>
     </header>
 
     <section class="panel" aria-label="Liste de courses">
       <form id="form">
         <textarea id="name" autocomplete="off" placeholder="Ajouter un article…&#10;Ou colle une liste : chaque ligne deviendra un produit."></textarea>
-        <p class="hint">Astuce : colle une liste avec un produit par ligne, puis appuie sur Ajouter.</p>
-        <select id="category" aria-label="Catégorie">
-          <option>Fruits & légumes</option>
-          <option>Boucherie</option>
-          <option>Épicerie</option>
-          <option>Bébé</option>
-          <option>Maison</option>
-          <option>Autre</option>
-        </select>
-        <button class="add" type="submit">Ajouter</button>
+        <p class="hint">Astuce : “2 lait”, “3x pommes” et les listes à puces sont reconnus automatiquement.</p>
+        <div class="form-row">
+          <select id="category" aria-label="Catégorie">
+            <option>Auto</option>
+            <option>Fruits & légumes</option>
+            <option>Boucherie</option>
+            <option>Épicerie</option>
+            <option>Bébé</option>
+            <option>Maison</option>
+            <option>Autre</option>
+          </select>
+          <button class="add" type="submit">Ajouter</button>
+        </div>
       </form>
 
       <div class="summary">
@@ -275,55 +464,124 @@
         <button class="clear" id="clear" type="button">Vider achetés</button>
       </div>
 
+      <button class="finish" id="finishList" type="button">Terminer la liste</button>
+
       <div class="filters" role="tablist" aria-label="Filtres">
         <button class="filter active" data-filter="all" type="button">Tous</button>
         <button class="filter" data-filter="todo" type="button">À acheter</button>
         <button class="filter" data-filter="done" type="button">Achetés</button>
       </div>
 
+      <button class="ghost" id="shoppingMode" type="button">Mode courses</button>
+      <div class="mode" id="modeList"></div>
       <div class="list" id="list"></div>
+    </section>
+
+    <section class="soft-panel" id="suggestionsPanel" hidden>
+      <div class="section-title">
+        <h2>Souvent ajoutés</h2>
+        <p>Basé sur ton historique</p>
+      </div>
+      <div class="chips" id="suggestions"></div>
+    </section>
+
+    <section class="soft-panel" id="favoritesPanel" hidden>
+      <div class="section-title">
+        <h2>Favoris</h2>
+        <p>Tes habituels</p>
+      </div>
+      <div class="chips" id="favorites"></div>
+    </section>
+
+    <section class="soft-panel" id="archivePanel" hidden>
+      <div class="section-title">
+        <h2>Historique</h2>
+        <p id="archiveText"></p>
+      </div>
     </section>
   </main>
 
+  <div class="toast" id="toast"></div>
+
   <script>
-    const STORAGE_KEY = "panier-doux-items-v1";
+    const STORAGE_KEY = "panier-doux-items-v3";
+    const HISTORY_KEY = "panier-doux-history-v1";
+    const FAVORITES_KEY = "panier-doux-favorites-v1";
+    const ARCHIVE_KEY = "panier-doux-archive-v1";
+
+    const CATEGORIES = ["Fruits & légumes", "Boucherie", "Épicerie", "Bébé", "Maison", "Autre"];
+    const CATEGORY_WORDS = {
+      "Fruits & légumes": ["pomme", "pommes", "banane", "bananes", "orange", "oranges", "citron", "tomate", "tomates", "salade", "carotte", "carottes", "oignon", "oignons", "ail", "avocat", "avocats", "concombre", "courgette", "poire", "fraises", "raisin", "patate", "pommes de terre"],
+      "Boucherie": ["poulet", "boeuf", "bœuf", "viande", "steak", "jambon", "dinde", "agneau", "saucisse", "poisson", "saumon", "thon", "crevettes"],
+      "Épicerie": ["lait", "pain", "riz", "pates", "pâtes", "farine", "sucre", "sel", "huile", "oeufs", "œufs", "yaourt", "yaourts", "cafe", "café", "the", "thé", "eau", "fromage", "cereales", "céréales", "beurre"],
+      "Bébé": ["couche", "couches", "lingettes", "lait bébé", "biberon", "tetine", "tétine", "body", "bodies", "compote", "petit pot"],
+      "Maison": ["lessive", "savon", "shampoing", "papier toilette", "essuie-tout", "sopalin", "produit vaisselle", "dentifrice", "sacs poubelle", "éponges", "eponge", "éponge"]
+    };
+
     const form = document.querySelector("#form");
     const nameInput = document.querySelector("#name");
     const categoryInput = document.querySelector("#category");
     const list = document.querySelector("#list");
+    const modeList = document.querySelector("#modeList");
     const counter = document.querySelector("#counter");
     const clearButton = document.querySelector("#clear");
+    const finishListButton = document.querySelector("#finishList");
+    const shoppingModeButton = document.querySelector("#shoppingMode");
     const filterButtons = [...document.querySelectorAll(".filter")];
+    const suggestionsPanel = document.querySelector("#suggestionsPanel");
+    const suggestions = document.querySelector("#suggestions");
+    const favoritesPanel = document.querySelector("#favoritesPanel");
+    const favorites = document.querySelector("#favorites");
+    const archivePanel = document.querySelector("#archivePanel");
+    const archiveText = document.querySelector("#archiveText");
+    const toast = document.querySelector("#toast");
 
-    let items = loadItems();
+    let items = load(STORAGE_KEY, []);
+    let history = load(HISTORY_KEY, {});
+    let favoriteNames = load(FAVORITES_KEY, []);
+    let archive = load(ARCHIVE_KEY, []);
     let filter = "all";
+    let shoppingMode = false;
+    let toastTimer;
+
+    migrateOldItems();
 
     form.addEventListener("submit", (event) => {
       event.preventDefault();
-      const names = nameInput.value
-        .split(/\r?\n/)
-        .map(line => line.trim())
-        .filter(Boolean);
+      const parsed = parseLines(nameInput.value, categoryInput.value);
+      if (parsed.length === 0) return;
 
-      if (names.length === 0) return;
-
-      const now = Date.now();
-      const newItems = names.map((name, index) => ({
-        id: now + index,
-        name,
-        category: categoryInput.value,
-        done: false
-      }));
-
-      items.unshift(...newItems);
+      addMany(parsed);
       nameInput.value = "";
-      saveAndRender();
       nameInput.focus();
     });
 
     clearButton.addEventListener("click", () => {
+      const removed = items.filter(item => item.done).length;
       items = items.filter(item => !item.done);
       saveAndRender();
+      if (removed) showToast(`${removed} article${removed > 1 ? "s" : ""} retiré${removed > 1 ? "s" : ""}.`);
+    });
+
+    finishListButton.addEventListener("click", () => {
+      if (items.length === 0 || items.some(item => !item.done)) return;
+
+      archive.unshift({
+        date: new Date().toISOString(),
+        count: items.length,
+        names: items.map(item => item.name)
+      });
+      archive = archive.slice(0, 20);
+      items = [];
+      saveAndRender();
+      showToast("Liste terminée et archivée.");
+    });
+
+    shoppingModeButton.addEventListener("click", () => {
+      shoppingMode = !shoppingMode;
+      shoppingModeButton.textContent = shoppingMode ? "Quitter le mode courses" : "Mode courses";
+      modeList.classList.toggle("active", shoppingMode);
+      render();
     });
 
     filterButtons.forEach(button => {
@@ -334,7 +592,104 @@
       });
     });
 
+    function parseLines(text, selectedCategory) {
+      return text
+        .split(/\r?\n/)
+        .map(line => cleanLine(line))
+        .filter(Boolean)
+        .map(line => parseItemLine(line, selectedCategory));
+    }
+
+    function cleanLine(line) {
+      return line
+        .replace(/^[\s\-–—•*]+/, "")
+        .replace(/^\d+[\).]\s*(?=\D)/, "")
+        .trim();
+    }
+
+    function parseItemLine(line, selectedCategory) {
+      let quantity = 1;
+      let name = line;
+
+      const quantityMatch = line.match(/^(\d+(?:[,.]\d+)?)\s*(?:x|×)?\s+(.+)$/i) || line.match(/^(.+?)\s+[x×]\s*(\d+(?:[,.]\d+)?)$/i);
+      if (quantityMatch) {
+        if (/^\d/.test(quantityMatch[1])) {
+          quantity = Number(quantityMatch[1].replace(",", "."));
+          name = quantityMatch[2];
+        } else {
+          name = quantityMatch[1];
+          quantity = Number(quantityMatch[2].replace(",", "."));
+        }
+      }
+
+      quantity = Number.isFinite(quantity) && quantity > 0 ? Math.min(quantity, 99) : 1;
+      name = titleName(name.trim());
+      const category = selectedCategory === "Auto" ? guessCategory(name) : selectedCategory;
+
+      return { name, quantity, category, done: false };
+    }
+
+    function addMany(newItems) {
+      const existing = new Map(items.map(item => [key(item.name), item]));
+      let added = 0;
+      let merged = 0;
+
+      newItems.forEach((entry, index) => {
+        const itemKey = key(entry.name);
+        if (existing.has(itemKey)) {
+          const item = existing.get(itemKey);
+          item.quantity = roundQuantity((item.quantity || 1) + entry.quantity);
+          item.done = false;
+          merged += 1;
+        } else {
+          const item = { id: Date.now() + index, ...entry };
+          items.unshift(item);
+          existing.set(itemKey, item);
+          added += 1;
+        }
+        remember(entry);
+      });
+
+      saveAndRender();
+      showToast(`${added} ajouté${added > 1 ? "s" : ""}${merged ? `, ${merged} fusionné${merged > 1 ? "s" : ""}` : ""}.`);
+    }
+
+    function addSuggestion(name) {
+      const data = history[key(name)] || {};
+      addMany([{ name, quantity: 1, category: data.category || guessCategory(name), done: false }]);
+    }
+
+    function remember(item) {
+      const itemKey = key(item.name);
+      const previous = history[itemKey] || { name: item.name, count: 0, category: item.category, lastAdded: 0 };
+      history[itemKey] = {
+        name: previous.name || item.name,
+        count: (previous.count || 0) + 1,
+        category: item.category || previous.category || guessCategory(item.name),
+        lastAdded: Date.now()
+      };
+
+      if (history[itemKey].count >= 3 && !favoriteNames.includes(itemKey)) {
+        favoriteNames.push(itemKey);
+      }
+
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+      localStorage.setItem(FAVORITES_KEY, JSON.stringify(favoriteNames));
+    }
+
     function render() {
+      renderMainList();
+      renderModeList();
+      renderSuggestions();
+      renderFavorites();
+      renderArchive();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+      localStorage.setItem(FAVORITES_KEY, JSON.stringify(favoriteNames));
+      localStorage.setItem(ARCHIVE_KEY, JSON.stringify(archive));
+    }
+
+    function renderMainList() {
       const remaining = items.filter(item => !item.done).length;
       counter.textContent = items.length === 0
         ? "Liste vide"
@@ -343,56 +698,195 @@
           : `${remaining} article${remaining > 1 ? "s" : ""} à acheter`;
 
       clearButton.disabled = !items.some(item => item.done);
+      finishListButton.classList.toggle("visible", items.length > 0 && remaining === 0);
 
-      const visible = items.filter(item => {
-        if (filter === "todo") return !item.done;
-        if (filter === "done") return item.done;
-        return true;
-      });
-
+      const visible = filteredItems();
       if (visible.length === 0) {
-        list.innerHTML = `<div class="empty">${items.length === 0 ? "Ajoute ton premier article." : "Rien dans ce filtre."}</div>`;
+        list.innerHTML = `<div class="empty">${items.length === 0 ? "Ajoute ton premier article ou colle une liste." : "Rien dans ce filtre."}</div>`;
         return;
       }
 
       list.innerHTML = "";
-      visible.forEach(item => {
-        const row = document.createElement("article");
-        row.className = `item ${item.done ? "done" : ""}`;
-        row.innerHTML = `
+      visible.forEach(item => list.appendChild(createItemRow(item, false)));
+    }
+
+    function renderModeList() {
+      if (!shoppingMode) {
+        modeList.innerHTML = "";
+        return;
+      }
+
+      const todo = items.filter(item => !item.done);
+      modeList.innerHTML = "";
+      if (todo.length === 0) {
+        modeList.innerHTML = `<div class="empty">Tout est coché. Tu peux terminer la liste.</div>`;
+        return;
+      }
+      todo.forEach(item => modeList.appendChild(createItemRow(item, true)));
+    }
+
+    function renderSuggestions() {
+      const current = new Set(items.map(item => key(item.name)));
+      const entries = Object.entries(history)
+        .filter(([itemKey]) => !current.has(itemKey))
+        .sort((a, b) => (b[1].count - a[1].count) || (b[1].lastAdded - a[1].lastAdded))
+        .slice(0, 6);
+
+      suggestionsPanel.hidden = entries.length === 0;
+      suggestions.innerHTML = "";
+      entries.forEach(([, data]) => suggestions.appendChild(createChip(`+ ${data.name}`, () => addSuggestion(data.name))));
+    }
+
+    function renderFavorites() {
+      const current = new Set(items.map(item => key(item.name)));
+      const entries = favoriteNames
+        .map(itemKey => history[itemKey])
+        .filter(Boolean)
+        .filter(data => !current.has(key(data.name)))
+        .slice(0, 10);
+
+      favoritesPanel.hidden = entries.length === 0;
+      favorites.innerHTML = "";
+      entries.forEach(data => favorites.appendChild(createChip(`★ ${data.name}`, () => addSuggestion(data.name), "favorite")));
+    }
+
+    function renderArchive() {
+      archivePanel.hidden = archive.length === 0;
+      if (archive.length === 0) return;
+
+      const last = archive[0];
+      archiveText.textContent = `${archive.length} liste${archive.length > 1 ? "s" : ""} terminée${archive.length > 1 ? "s" : ""}, dernière avec ${last.count} article${last.count > 1 ? "s" : ""}.`;
+    }
+
+    function createChip(text, onClick, extraClass = "") {
+      const chip = document.createElement("button");
+      chip.className = `chip ${extraClass}`;
+      chip.type = "button";
+      chip.textContent = text;
+      chip.addEventListener("click", onClick);
+      return chip;
+    }
+
+    function createItemRow(item, largeMode) {
+      const row = document.createElement("article");
+      row.className = `item ${item.done ? "done" : ""}`;
+      row.innerHTML = largeMode
+        ? `
           <button class="check" type="button" aria-label="${item.done ? "Marquer non acheté" : "Marquer acheté"}">${item.done ? "✓" : ""}</button>
           <div>
             <div class="name"></div>
             <div class="cat"></div>
           </div>
+        `
+        : `
+          <button class="check" type="button" aria-label="${item.done ? "Marquer non acheté" : "Marquer acheté"}">${item.done ? "✓" : ""}</button>
+          <div>
+            <div class="name"></div>
+            <div class="cat"></div>
+          </div>
+          <div class="qty" aria-label="Quantité">
+            <button class="minus" type="button" aria-label="Diminuer">−</button>
+            <span></span>
+            <button class="plus" type="button" aria-label="Augmenter">+</button>
+          </div>
           <button class="delete" type="button" aria-label="Supprimer">×</button>
         `;
-        row.querySelector(".name").textContent = item.name;
-        row.querySelector(".cat").textContent = item.category;
-        row.querySelector(".check").addEventListener("click", () => {
-          item.done = !item.done;
+
+      row.querySelector(".name").textContent = displayName(item);
+      row.querySelector(".cat").textContent = item.category;
+      row.querySelector(".check").addEventListener("click", () => {
+        item.done = !item.done;
+        saveAndRender();
+      });
+
+      if (!largeMode) {
+        row.querySelector(".qty span").textContent = item.quantity || 1;
+        row.querySelector(".minus").addEventListener("click", () => {
+          item.quantity = Math.max(1, roundQuantity((item.quantity || 1) - 1));
+          saveAndRender();
+        });
+        row.querySelector(".plus").addEventListener("click", () => {
+          item.quantity = Math.min(99, roundQuantity((item.quantity || 1) + 1));
           saveAndRender();
         });
         row.querySelector(".delete").addEventListener("click", () => {
           items = items.filter(candidate => candidate.id !== item.id);
           saveAndRender();
         });
-        list.appendChild(row);
+      }
+
+      return row;
+    }
+
+    function filteredItems() {
+      return items.filter(item => {
+        if (filter === "todo") return !item.done;
+        if (filter === "done") return item.done;
+        return true;
       });
     }
 
     function saveAndRender() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
       render();
     }
 
-    function loadItems() {
+    function load(storageKey, fallback) {
       try {
-        const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-        return Array.isArray(parsed) ? parsed : [];
+        const parsed = JSON.parse(localStorage.getItem(storageKey) || JSON.stringify(fallback));
+        return parsed && typeof parsed === "object" ? parsed : fallback;
       } catch {
-        return [];
+        return fallback;
       }
+    }
+
+    function key(name) {
+      return name
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^\p{Letter}\p{Number}\s]/gu, "")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function titleName(name) {
+      if (!name) return name;
+      return name.charAt(0).toUpperCase() + name.slice(1);
+    }
+
+    function guessCategory(name) {
+      const itemKey = key(name);
+      for (const category of CATEGORIES) {
+        const words = CATEGORY_WORDS[category] || [];
+        if (words.some(word => itemKey.includes(key(word)))) return category;
+      }
+      return "Autre";
+    }
+
+    function displayName(item) {
+      const quantity = item.quantity || 1;
+      return quantity > 1 ? `${item.name} ×${quantity}` : item.name;
+    }
+
+    function roundQuantity(value) {
+      return Math.round(value * 10) / 10;
+    }
+
+    function migrateOldItems() {
+      items = items.map(item => ({
+        id: item.id || Date.now() + Math.random(),
+        name: item.name || "Article",
+        category: CATEGORIES.includes(item.category) ? item.category : guessCategory(item.name || ""),
+        done: item.done === true,
+        quantity: item.quantity || 1
+      }));
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove("show"), 2200);
     }
 
     if ("serviceWorker" in navigator) {
